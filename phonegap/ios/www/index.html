@@ -4,8 +4,26 @@
 	<title>My Page</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="css/jquery.mobile-1.3.0.min.css" />
-	<script src="js/jquery-1.9.0.min.js"></script>
+	<script src="js/jquery-1.8.2.min.js"></script>
 	<script src="js/jquery.mobile-1.3.0.min.js"></script>
+	<script src="http://localhost:8080/target/target-script-min.js#anonymous"></script>
+	<script type="text/javascript">
+	function getBookList() {
+	  	$.getJSON("http://libr.herokuapp.com/api/books", function(data) {
+		$('#bookList li').remove();
+		books = data.books;
+		$.each(books, function(index, book) {
+			$('#bookList').append(
+				'<li><a href="#">' +
+					'<img src="'+ book.image + '"/>' +
+					'<h4>' + book.name + '</h4>' + 
+					'<p>Author: ' + book.isbn + '</p>' +
+					'</a></li>');
+			$('#bookList').listview('refresh');
+		});
+});	
+}
+	</script>
 </head>
 <body>
 
@@ -16,17 +34,17 @@
 		</div>
 
 		<div data-role="content">
-			<ul data-role="listview">
+			<ul id="bookList" data-role="listview">
 				<li>
 					<a href="#">
 						<img src="img/rework.jpg"/>
 						<h4>Rework</h4>
 						<p>Author: Jason Fried</p>
-						<span class="ui-li-count"></span>
 					</a>
 				</li>
 			</ul>
 		</div>
+		<button onClick="getBookList()">click</button>
 
 	</div>
 
