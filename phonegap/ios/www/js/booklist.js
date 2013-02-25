@@ -1,7 +1,6 @@
 var app = {
 	// Application Constructor
 	initialize: function() {
-		console.log("inside init");
 		this.bindEvents();
 	},
 	// Bind Event Listeners
@@ -9,9 +8,13 @@ var app = {
 	// Bind any events that are required on startup. Common events are:
 	// 'load', 'deviceready', 'offline', and 'online'.
 	bindEvents: function() {
-		console.log("inside bindEvent");
-		this.loadBookList();
-		// document.addEventListener('deviceready', this.onDeviceReady, false);
+		if(navigator.userAgent.match(/(iPhone|iPod|iPad)/)) {
+        	document.addEventListener('deviceready', this.onDeviceReady, false);
+        	console.log("ios userAgent");
+		} else {
+ 		    this.loadBookList();	
+
+		}
 	},
 	// deviceready Event Handler
 	//
@@ -19,8 +22,11 @@ var app = {
 	// function, we must explicity call 'app.receivedEvent(...);'
 	onDeviceReady: function() {
 		app.receivedEvent('deviceready');
-		loadBookList();
-	},
+	},		
+
+    receivedEvent: function(id) {
+    	app.loadBookList();
+    },
 
 	loadBookList: function() {
 		$.getJSON("http://libr.herokuapp.com/api/books", function(data) {
@@ -30,8 +36,8 @@ var app = {
 				$('#bookList').append(
 					'<li><a href="#">' +
 					'<img src="' + book.image + '"/>' +
-					'<h4>' + book.name + '</h4>' +
 					'<p>Author: ' + book.isbn + '</p>' +
+					'<h4>' + book.name + '</h4>' +
 					'</a></li>');
 				$('#bookList').listview('refresh');
 			});
